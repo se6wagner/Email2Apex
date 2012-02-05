@@ -6,11 +6,11 @@ private class E2A_Test
 	// Setup
 	//--------------------------------------------------------------
 	private final static String TEST_IMPL_CLASS = 'E2A_TestExecutableImpl';
-	static Boolean setupDone = false;
+	static E2A_CONFIG__c config;
 	private static void startTest(Boolean doStart)
 	{
 
-		if(!setupDone)
+		if(config == null)
 		{
 			// test E2A.getE2AConfig() exception before creating new default
 			try{
@@ -28,13 +28,14 @@ private class E2A_Test
 
 
 			// new org default config
-			E2A_CONFIG__c config = new E2A_CONFIG__c();
+			config = new E2A_CONFIG__c();
 			config.TO_ADDRESS__c = 'e2a_test@domain.test';
 			config.CC_ADDRESSES__c = 'e2a_cc@domain.test';
 			config.ORG_WIDE_EMAIL_ADDRESS_ID__c =
 						!owea.isEmpty() ? owea[0].Id : null;
-
-			insert config;
+			config.SetupOwnerId = UserInfo.getOrganizationId();
+			upsert config;
+			system.debug('####CONFIG ' + config);
 		}
 
 		if(doStart)
@@ -73,13 +74,19 @@ private class E2A_Test
 		Test.stopTest();
 	}
 
+	/**
+	 * Tests ParamsAttachmentGetter without serialization
+	 */
 	private static testMethod void testParamsAttachmentUnserizaled()
 	{
+		startTest(true);
 		Object paramsObj = 'PARAMS BODY';
 		Messaging.Emailfileattachment file = 
 					E2A.getParamsAttachmentFor(paramsObj, false);
 
 		system.assert(file.getBody().toString() == 'PARAMS BODY');
+
+		Test.stopTest();
 	}
 	/**
 	 * Tests E2A.sendE2AMessage
