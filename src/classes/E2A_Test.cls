@@ -2,7 +2,9 @@
 private class E2A_Test
 {
 
-
+	//--------------------------------------------------------------
+	// Setup
+	//--------------------------------------------------------------
 	private final static String TEST_IMPL_CLASS = 'E2A_TestExecutableImpl';
 	static Boolean setupDone = false;
 	private static void startTest(Boolean doStart)
@@ -34,16 +36,19 @@ private class E2A_Test
 
 			insert config;
 		}
-		
+
 		if(doStart)
 		{
 			Test.startTest();
 		}
 	}
 
+	//--------------------------------------------------------------
+	// Setup
+	//--------------------------------------------------------------
+
 	/**
-	 * Basic tests
-	 *
+	 * Test Clas Name validation
 	 */
 	private static testMethod void testValidateClassName()
 	{
@@ -68,8 +73,17 @@ private class E2A_Test
 		Test.stopTest();
 	}
 
+	private static testMethod void testParamsAttachmentUnserizaled()
+	{
+		Object paramsObj = 'PARAMS BODY';
+		Messaging.Emailfileattachment file = 
+					E2A.getParamsAttachmentFor(paramsObj, false);
 
-
+		system.assert(file.getBody().toString() == 'PARAMS BODY');
+	}
+	/**
+	 * Tests E2A.sendE2AMessage
+	 */
 	private static testMethod void testSendMessage()
 	{
 		startTest(true);

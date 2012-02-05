@@ -1,5 +1,5 @@
 /**
- * E2A - Email 2 Apex
+ * E2A - Email 2 Apex 
  *
  */
 global class E2A
@@ -90,39 +90,39 @@ global class E2A
 	 *					: Object holding parameters used by the executed class
 	 * @params doSerialze
 	 *					: True serializes the paramsObj to JSON
-	 * @params checkResult
-	 *					: True to throw an Exception if result is negativ
-	 *
+	 * @params checkResult : True to throw an Exception if result is negativ
 	 * @throw OutboundEmailException
 	 */
 	global static void sendE2AMessage(
 		  String emailBody
 		, String className
 		, Object paramsObj
-		, Boolean doSerialze
-		, Boolean checkResult)
+		, Boolean doSerialze, Boolean checkResult)
 	{
-
 		// init new Message 
 		Messaging.SinglEemailMessage email = 
 				getNewE2AMessage(className,paramsObj,doSerialze);
-
 		// sent
 		Messaging.SendEmailResult res =
-				Messaging.sendEmail(
-					new Messaging.SinglEemailMessage[]{email}).get(0);
-
-		if (checkResult && !res.isSuccess()) 
-		{
-			throw new OutboundEmailException(res.getErrors()[0].getMessage());
-		}
+			Messaging.sendEmail(new Messaging.SinglEemailMessage[]{email}).get(0);
+		if (checkResult && !res.isSuccess()) {throw new OutboundEmailException(res.getErrors()[0].getMessage());}
 
 	}
 
 
 	/**
+	 * getNewE2AMessage
+	 * 
+	 * Generates a new Messaging.SinglEemailMessage Object for E2A
 	 *
-	 *
+	 * @params className
+	 *					: Name of the Apex class to execute
+	 * @params paramsObj
+	 *					: Object holding parameters used by the executed class
+	 * @params doSerialze
+	 *					: True serializes the paramsObj to JSON
+	 *	 
+	 * @returns Messaging.SinglEemailMessage
 	 */
 	global static Messaging.SinglEemailMessage getNewE2AMessage(
 		  String className
@@ -177,50 +177,36 @@ global class E2A
 	 *
 	 * @params className
 	 *					: Name of the Apex class to execute
-	 * @params paramsObj
-	 *					: Object holding parameters used by the executed class  
+	 * @params paramsObj: Object holding parameters used by the executed class
+	 *					:   
 	 */
 	global static void execute(String className, Object paramsObj)
 	{
 
-		//
-		// validate class name to avoid
-		// System.UnexpectedException: Salesforce System Error
-		//
-		E2A.isValidClassName(className);
 
-		// construct new object to execute
-		E2A.Executeable toExecute;
-
+		E2A.isValidClassName(className); // validate class name to avoid System.UnexpectedException: Salesforce System Error
+		
+		E2A.Executeable toExecute; // construct new object to execute
 		// init new parser
 		JSONParser parser = JSON.createParser('{}');
 
 		// assign type
 		Type paramType = Type.forName(className);
-	
+
 		// cast to type
 		toExecute = (E2A.Executeable)parser.readValueAs(paramType);
 
 		// set params if defined by casting to E2A.ExecuteableWithParams type
-		if (paramsObj != null)
-		{
-			((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);
-		}
-
-		// run
+		if (paramsObj != null){((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);}
 		toExecute.e2a_execute();
 	}
-
-
-
 
 	/**
 	 * isValidClassName
 	 *
-	 *
 	 * Returns true if a String is valid className (NamespacePrefix supported)
 	 *
-	 * @params className
+	 * @params className 
 	 *					: Name of the Apex Class to execute 
 	 * @returns Boolean
 	 *					: True if valid
@@ -289,11 +275,12 @@ global class E2A
 	/**
 	 * createParamsFile
 	 *
-	 * eturns a E2A ready TextAttachment object holding the JSON
+	 * Returns a E2A ready TextAttachment object holding the JSON
 	 * serialzed paramsObj to be executed 
 	 *
 	 * @params paramsObj
-	 *					: Object to serialze 
+	 *					: Object to serialze
+	 *
 	 * @returns Messaging.Inboundemail.Textattachment
 	 *					: pretty JSON serialzed paramsObject 	 
 	 */
@@ -315,11 +302,7 @@ global class E2A
 		else
 		{
 			file.setBody(Blob.valueOf(''+paramsObj));
-		}		
+		}
 		return file;
-
 	}
-
-
-
 }
