@@ -34,7 +34,7 @@ private class E2A_Test
 			config.ORG_WIDE_EMAIL_ADDRESS_ID__c =
 						!owea.isEmpty() ? owea[0].Id : null;
 			config.SetupOwnerId = UserInfo.getOrganizationId();
-			upsert config;
+			database.upsert(config,false);
 			system.debug('####CONFIG ' + config);
 		}
 
