@@ -24,8 +24,8 @@ private class E2A_Test
 			List<OrgWideEmailAddress> owea = [
 				select Id
 				  from OrgWideEmailAddress
+				 where IsAllowAllProfiles = true
 				 limit 1];
-
 
 			// new org default config
 			config = new E2A_CONFIG__c();

@@ -21,6 +21,7 @@ private class E2A_TestSamples
 			List<OrgWideEmailAddress> owea = [
 				select Id
 				  from OrgWideEmailAddress
+				 where IsAllowAllProfiles = true 
 				 limit 1];
 
 
