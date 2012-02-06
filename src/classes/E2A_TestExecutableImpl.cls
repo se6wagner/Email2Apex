@@ -1,7 +1,7 @@
 /**
  * E2A_TestExecutableImpl
  *
- * supports test impl
+ * Mock Object for Testclass
  */
 global class E2A_TestExecutableImpl implements E2A.ExecuteableWithParams
 {

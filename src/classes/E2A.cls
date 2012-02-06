@@ -5,7 +5,6 @@
 global class E2A
 {
 
-
 	//--------------------------------------------------------------
 	// CONSTANTS && VARIABLES
 	//--------------------------------------------------------------
@@ -15,7 +14,7 @@ global class E2A
 	static E2A_CONFIG__c E2A_CONFIG;
 
 	/**
-	 * getE2AConfig  
+	 * getE2AConfig
 	 *
 	 * Returns the OrgDefault setting from E2A_CONFIG__c
 	 *
@@ -97,7 +96,8 @@ global class E2A
 		  String emailBody
 		, String className
 		, Object paramsObj
-		, Boolean doSerialze, Boolean checkResult)
+		, Boolean doSerialze
+		, Boolean checkResult)
 	{
 		// init new Message 
 		Messaging.SinglEemailMessage email = 
@@ -105,7 +105,11 @@ global class E2A
 		// sent
 		Messaging.SendEmailResult res =
 			Messaging.sendEmail(new Messaging.SinglEemailMessage[]{email}).get(0);
-		if (checkResult && !res.isSuccess()) {throw new OutboundEmailException(res.getErrors()[0].getMessage());}
+
+		if (checkResult && !res.isSuccess()) 
+		{
+			throw new OutboundEmailException(res.getErrors()[0].getMessage());
+		}
 
 	}
 
@@ -133,7 +137,7 @@ global class E2A
 		// new Message Object
 		Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 		mail.setSubject('E2A Message: ' + className);
-		mail.setPlainTextBody('Email2Batch Message');
+		mail.setPlainTextBody('Email2Apex Message');
 
 		// Load config to set addresses
 		E2A_CONFIG__c config = getE2AConfig();
@@ -151,19 +155,11 @@ global class E2A
 			mail.setOrgWideEmailAddressId(config.ORG_WIDE_EMAIL_ADDRESS_ID__c);
 		}
 
-
-		mail.setFileAttachments(new List<Messaging.EmailFileattachment>());
-
-		// add Attachment containing the class name
-		mail.getFileAttachments()
-			.add(E2A.getClassNameAttachmentFor(className));
-
-		// add Attachment containg paramsObj		
-		if (paramsObj != null)
-		{
-			mail.getFileAttachments()
-				.add(E2A.getParamsAttachmentFor(paramsObj,doSerialze));	
-		}
+		// set file attachments
+		mail.setFileAttachments(new List<Messaging.EmailFileattachment>{
+			  E2A.getClassNameAttachmentFor(className)
+			, E2A.getParamsAttachmentFor(paramsObj,doSerialze)
+		});
 
 		return mail;
 	}
@@ -197,7 +193,10 @@ global class E2A
 		toExecute = (E2A.Executeable)parser.readValueAs(paramType);
 
 		// set params if defined by casting to E2A.ExecuteableWithParams type
-		if (paramsObj != null){((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);}
+		if (paramsObj != null)
+		{
+			((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);
+		}
 		toExecute.e2a_execute();
 	}
 
@@ -264,10 +263,11 @@ global class E2A
 		file.setFileName(CLASS_NAME_FILE_NAME);
 
 		file.fileName = CLASS_NAME_FILE_NAME;
+		file.setContentType('text/plain;charset=utf8');
 		file.setBody(Blob.valueOf(className));
 
 		return file;
-		
+
 	}
 
 
@@ -292,6 +292,7 @@ global class E2A
 			= new Messaging.EmailFileAttachment();
 
 		file.setFileName(PARAMS_FILE_NAME);
+		file.setContentType('text/plain;charset=utf8');
 
 		// serialze to JSON
 		if (doSerialze)

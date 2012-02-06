@@ -3,8 +3,11 @@
     <types>
         <members>E2A</members>
         <members>E2A_InboundEmailHandler</members>
+        <members>E2A_SampleBatch1</members>
+        <members>E2A_SampleBatch2</members>
         <members>E2A_Test</members>
         <members>E2A_TestExecutableImpl</members>
+        <members>E2A_TestSamples</members>
         <name>ApexClass</name>
     </types>
     <types>

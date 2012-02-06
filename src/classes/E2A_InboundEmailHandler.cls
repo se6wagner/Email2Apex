@@ -14,9 +14,11 @@ global class E2A_InboundEmailHandler implements Messaging.InboundEmailHandler
 		, Messaging.InboundEnvelope envelope
 	)
 	{
-
+		// if true subject is used as className 
 		Boolean trySubject = true;
+		// name of the apex class
 		String className = null;
+		// Object containing the parameters
 		Object paramsObj = null;
 
 		//
@@ -28,7 +30,7 @@ global class E2A_InboundEmailHandler implements Messaging.InboundEmailHandler
 		{
 
 			system.debug(email.textAttachments.size() + ' Attachments found');
-			
+
 			for (Messaging.InboundEmail.TextAttachment ta:email.textAttachments)
 			{
 
@@ -68,13 +70,14 @@ global class E2A_InboundEmailHandler implements Messaging.InboundEmailHandler
 		{
 			E2A.execute(className, paramsObj);
 			result.success = true;
-			result.message = 'Executed class ' + className + ' successfully'; 
+			result.message = 'E2A:: Queued class ' + className + ' successfully'; 
 		}
 		catch(Exception ex)
 		{
 			result.success = false;
 			result.message = ex.getMessage();
 		}
+
 		return result;
 
 	}
