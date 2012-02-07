@@ -77,6 +77,15 @@ global class E2A_SampleBatch2 implements
 	//--------------------------------------------------------------
 	global class ParamsObj
 	{
+		global ParamsObj()
+		{
+			accountList = new List<Account>();
+		}
+
+		global ParamsObj(List<Account> accList)
+		{
+			this.accountList = accList;
+		}
 		global List<Account> accountList;
 	}
 

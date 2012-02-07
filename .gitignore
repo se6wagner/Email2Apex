@@ -4,3 +4,5 @@
 salesforce.schema
 
 .settings/com.salesforce.ide.core.prefs
+
+.DS_Store

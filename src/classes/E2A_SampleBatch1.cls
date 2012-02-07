@@ -42,7 +42,7 @@ global class E2A_SampleBatch1 implements
 		E2A.sendE2AMessage(
 			'E2A_SampleBatch1 finished - start E2A_SampleBatch2'
 		  , 'E2A_SampleBatch2'
-		  , JSON.serializePretty(accounts)
+		  , new E2A_SampleBatch2.ParamsObj(accounts)
 		  , true
 		  , true
 		);

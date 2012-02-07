@@ -57,7 +57,7 @@ private class E2A_TestSamples
 
 	private static testMethod void testBatch2()
 	{
-		
+
 		startTest(true);
 
 		E2A_SampleBatch2 b2 = new E2A_SampleBatch2();
