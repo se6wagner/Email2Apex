@@ -18,9 +18,8 @@ global class E2A
 	 *
 	 * Returns the OrgDefault setting from E2A_CONFIG__c
 	 *
-	 * @throws
-	 *					: ConfigNotFoundException
 	 * @returns E2A_CONFIG__c
+	 * @throws ConfigNotFoundException
 	 */
 	global static E2A_CONFIG__c getE2AConfig()
 	{
@@ -69,9 +68,15 @@ global class E2A
 		/**
 		 * Method for setting parameter object
 		 *
-		 * NOTE: below is an example to deserialze a JSON string into
-		         a custom data type
+		 * NOTE
+		 		: below is an example to deserialze a JSON string into
+		          a custom data type. 
+		   CAREFUL
+		   		: Be careful using serializing a subclass from JSON causes 
+		   		'System.JSONException: Don't know the type of the Apex object
+		   		to deserialize' in production (Winter '12) 
 		 */
+
 		 /**
 		  	global void e2a_setParams(Object paramsObj)
 			{
@@ -103,8 +108,9 @@ global class E2A
 	 *					: Object holding parameters used by the executed class
 	 * @params doSerialze
 	 *					: True serializes the paramsObj to JSON
-	 * @params checkResult : True to throw an Exception if result is negativ
-	 * @throw OutboundEmailException
+	 * @params checkResult
+	 					: True to throw an Exception if result is negativ
+	 * @throws OutboundEmailException
 	 */
 	global static void sendE2AMessage(
 		  String emailBody
@@ -187,8 +193,8 @@ global class E2A
 	 *
 	 * @params className
 	 *					: Name of the Apex class to execute
-	 * @params paramsObj: Object holding parameters used by the executed class
-	 *					:   
+	 * @params paramsObj
+	 *					: Object holding parameters used by the executed class
 	 */
 	global static void execute(String className, Object paramsObj)
 	{
@@ -223,8 +229,7 @@ global class E2A
 	 *					: Name of the Apex Class to execute 
 	 * @returns Boolean
 	 *					: True if valid
-	 * @throws
-	 * 					: InvalidClassNameException
+	 * @throws  InvalidClassNameException
 	 */
 	global static Boolean isValidClassName(String className)
 	{

@@ -9,14 +9,14 @@ global class E2A_SampleBatch2 implements
 	, E2A.ExecuteableWithParams
 {
 
-	ParamsObj params;
+	E2A_SampleParamsObj params;
 
 	//--------------------------------------------------------------
 	// Constructor
 	//--------------------------------------------------------------
 	global E2A_SampleBatch2(){}
 
-	global E2A_SampleBatch2(ParamsObj paramsObj)
+	global E2A_SampleBatch2(E2A_SampleParamsObj paramsObj)
 	{
 		this.params = paramsObj;
 	}
@@ -38,7 +38,7 @@ global class E2A_SampleBatch2 implements
 	 */
 	global void e2a_setParams(Object paramsObj)
 	{
-		params = (E2A_SampleBatch2.ParamsObj)JSON.deserialize((String)paramsObj, E2A_SampleBatch2.ParamsObj.class);
+		params = (E2A_SampleParamsObj)JSON.deserialize((String)paramsObj, E2A_SampleParamsObj.class);
 	}
 
 	//--------------------------------------------------------------
@@ -71,22 +71,4 @@ global class E2A_SampleBatch2 implements
 		// Finish it
 		//
 	}
-
-	//--------------------------------------------------------------
-	// DataType holds List of Accounts
-	//--------------------------------------------------------------
-	global class ParamsObj
-	{
-		global ParamsObj()
-		{
-			accountList = new List<Account>();
-		}
-
-		global ParamsObj(List<Account> accList)
-		{
-			this.accountList = accList;
-		}
-		global List<Account> accountList;
-	}
-
 }
