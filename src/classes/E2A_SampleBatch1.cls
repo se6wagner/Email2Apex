@@ -39,6 +39,7 @@ global class E2A_SampleBatch1 implements
 	global void finish(Database.BatchableContext BC)
 	{
 
+		// call E2A API to send message
 		E2A.sendE2AMessage(
 			'E2A_SampleBatch1 finished - start E2A_SampleBatch2'
 		  , 'E2A_SampleBatch2'

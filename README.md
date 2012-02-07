@@ -1,8 +1,12 @@
 # E2A - Email2Apex #
 
-Toolkit for executing Apex Code from Apex Email Services. With E2A you can chain Apex Batch Jobs and include parameters.
+Toolkit for executing Apex Code from Apex Email Services.
 
-To install E2A Unmanaged Package click [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tU0000000QGcW)
+## FEATURES ##
+* batch job chaining / async execution
+* support for parameters incl. complex data types through JSON serialization
+* trigger Apex Code from any application with no need for Webservice Integration
+* simple API (check usage)
 
 ## SETUP ##
 * 1) Register an Apex Email Service using the E2A_InboundEmailHandler class

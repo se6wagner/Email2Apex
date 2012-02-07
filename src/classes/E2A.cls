@@ -66,6 +66,20 @@ global class E2A
 	global interface ExecuteableWithParams extends Executeable
 	{
 
+		/**
+		 * Method for setting parameter object
+		 *
+		 * NOTE: below is an example to deserialze a JSON string into
+		         a custom data type
+		 */
+		 /**
+		  	global void e2a_setParams(Object paramsObj)
+			{
+				params = (<CONCRETE_TYPE>)JSON.deserialize(
+							(String)paramsObj,
+							<CONCRETE_TYPE>.class);
+			}
+		**/
 		void e2a_setParams(Object paramsObject);
 
 	}
