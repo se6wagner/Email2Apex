@@ -41,11 +41,11 @@ global class E2A_SampleBatch1 implements
 
 		// call E2A API to send message
 		E2A.sendE2AMessage(
-			'E2A_SampleBatch1 finished - start E2A_SampleBatch2'
-		  , 'E2A_SampleBatch2'
+		    'E2A_SampleBatch2'
 		  , new E2A_SampleParamsObj(accounts)
 		  , true
 		  , true
+		  , 'E2A_SampleBatch1 finished - start E2A_SampleBatch2'
 		);
 	}
 

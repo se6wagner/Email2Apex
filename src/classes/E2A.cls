@@ -137,17 +137,46 @@ global class E2A
 	}
 
 	//--------------------------------------------------------------
-	// API METHODS
+	// MAIN API METHODS
 	//--------------------------------------------------------------
+
+	//
+	// SENDING
+	//
 
 	/**
 	 * sendE2AMessage
 	 *
-	 * Initialzies an E2A_Executable class defined by it className using
-	 * params defined by params parameters
+	 * Create an E2A Message and sends it to the E2A Email Service
 	 *
+	 * @params className
+	 *					: Name of the Apex class to execute
+	 * @params checkResult
+	 * 					: True to throw an Exception if result is negativ
 	 * @params emailBody
 	 *					: Plain Text Body to set
+	 * @throws OutboundEmailException
+	 */
+	global static void sendE2AMessage(
+		  String className	
+		, Boolean checkResult
+		, String emailBody
+	)
+	{
+		E2A.sendE2AMessage(
+			  className
+			, null
+			, false
+			, checkResult
+			, emailBody);
+	}
+
+
+	/**
+	 * sendE2AMessage
+	 *
+	 * Create an E2A Message and sends it to the E2A Email Service
+	 *
 	 * @params className
 	 *					: Name of the Apex class to execute
 	 * @params paramsObj
@@ -155,15 +184,18 @@ global class E2A
 	 * @params doSerialze
 	 *					: True serializes the paramsObj to JSON
 	 * @params checkResult
-	 					: True to throw an Exception if result is negativ
+	 * 					: True to throw an Exception if result is negativ
+	 * @params emailBody
+	 *					: Plain Text Body to set
 	 * @throws OutboundEmailException
 	 */
 	global static void sendE2AMessage(
-		  String emailBody
-		, String className
+		  String className
 		, Object paramsObj
 		, Boolean doSerialze
-		, Boolean checkResult)
+		, Boolean checkResult
+		, String emailBody
+		)
 	{
 		// init new Message 
 		Messaging.SinglEemailMessage email = 
@@ -179,6 +211,47 @@ global class E2A
 
 	}
 
+
+	/**
+	 * execute
+	 *
+	 * Initialzies an E2A_Executable class defined by its className and executes
+	 * e2a_execute() method
+	 *
+	 * @params className
+	 *					: Name of the Apex class to execute
+	 * @params paramsObj
+	 *					: Object holding parameters used by the executed class
+	 * @returns E2A.ExecutionResult
+	 */
+	global static E2A.ExecutionResult execute(String className, Object paramsObj)
+	{
+
+		E2A.isValidClassName(className); // validate class name to avoid System.UnexpectedException: Salesforce System Error
+		
+		E2A.Executeable toExecute; // construct new object to execute
+		// init new parser
+		JSONParser parser = JSON.createParser('{}');
+
+		// assign type
+		Type paramType = Type.forName(className);
+
+		// cast to type
+		toExecute = (E2A.Executeable)parser.readValueAs(paramType);
+
+		// set params if defined by casting to E2A.ExecuteableWithParams type
+		if (paramsObj != null)
+		{
+			((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);
+		}
+		return toExecute.e2a_execute();
+	}
+
+
+
+	//--------------------------------------------------------------
+	// API UTIL METHODS
+	//--------------------------------------------------------------
 
 	/**
 	 * getNewE2AMessage
@@ -239,81 +312,6 @@ global class E2A
 	
 		return mail;
 	}
-
-
-	/**
-	 * execute
-	 *
-	 * Initialzies an E2A_Executable class defined by it className using
-	 * params defined by params parameters
-	 *
-	 * @params className
-	 *					: Name of the Apex class to execute
-	 * @params paramsObj
-	 *					: Object holding parameters used by the executed class
-	 * @returns E2A.ExecutionResult
-	 */
-	global static E2A.ExecutionResult execute(String className, Object paramsObj)
-	{
-
-
-		E2A.isValidClassName(className); // validate class name to avoid System.UnexpectedException: Salesforce System Error
-		
-		E2A.Executeable toExecute; // construct new object to execute
-		// init new parser
-		JSONParser parser = JSON.createParser('{}');
-
-		// assign type
-		Type paramType = Type.forName(className);
-
-		// cast to type
-		toExecute = (E2A.Executeable)parser.readValueAs(paramType);
-
-		// set params if defined by casting to E2A.ExecuteableWithParams type
-		if (paramsObj != null)
-		{
-			((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);
-		}
-		return toExecute.e2a_execute();
-	}
-
-	/**
-	 * isValidClassName
-	 *
-	 * Returns true if a String is valid className (NamespacePrefix supported)
-	 *
-	 * @params className 
-	 *					: Name of the Apex Class to execute 
-	 * @returns Boolean
-	 *					: True if valid
-	 * @throws  InvalidClassNameException
-	 */
-	global static Boolean isValidClassName(String className)
-	{
-
-		// NamespacePrefix if found in className
-		String nsp;
-		// Query to validate className 
-		String qry = 'select Id from ApexClass where Name =: className ';
-
-		// check for Managed Package and filter on
-		// Namespace Prefix if neccessary.
-		if(className.contains('__'))
-		{
-			qry += ' and NamespacePrefix =: nsp';
-		}
-
-		// Exception if invalid class name
-		if(Database.query(qry).isEmpty())
-		{
-			 throw new InvalidClassNameException(className + ' does not exist');
-		}
-
-		return true;
-	}
-
-
-
 
 
 	/**
@@ -381,5 +379,42 @@ global class E2A
 			file.setBody(Blob.valueOf(''+paramsObj));
 		}
 		return file;
+	}
+	
+	
+
+	/**
+	 * isValidClassName
+	 *
+	 * Returns true if a String is valid className (NamespacePrefix supported)
+	 *
+	 * @params className 
+	 *					: Name of the Apex Class to execute 
+	 * @returns Boolean
+	 *					: True if valid
+	 * @throws  InvalidClassNameException
+	 */
+	global static Boolean isValidClassName(String className)
+	{
+
+		// NamespacePrefix if found in className
+		String nsp;
+		// Query to validate className 
+		String qry = 'select Id from ApexClass where Name =: className ';
+
+		// check for Managed Package and filter on
+		// Namespace Prefix if neccessary.
+		if(className.contains('__'))
+		{
+			qry += ' and NamespacePrefix =: nsp';
+		}
+
+		// Exception if invalid class name
+		if(Database.query(qry).isEmpty())
+		{
+			 throw new InvalidClassNameException(className + ' does not exist');
+		}
+
+		return true;
 	}
 }

@@ -19,17 +19,40 @@ Toolkit for executing Apex Code from Apex Email Services.
 ### CAUTION:: Be careful when using custom data types as parameter objects, deserializing classes using (DATA_TYPE)JSON.deserialize((String)paramsObj, DATA_TYPE.class); causes an 'System.JSONException: Don't know the type of the Apex object to deserialize' error in production like EMEA (as of Winter '12) ###
 
 	//
+	// E2A.sendE2AMessage
+	// 
 	// Sends an E2A ready message with Attachments
 	// class_name.e2b (Contains className)
 	// param_class.json.e2a (Contains JSON serialized paramsObj if doSerialze is true)
+	// to the E2A Apex Email Service you have setted up
 	//
+	// @params String className: Name of the Apex class to execute
+	// @params Object paramsObj: Optional - Object holding parameters used by the executed class
+	// @params Boolean doSerialize: Optional - True serializes the paramsObj to JSON
+	// @params Boolean checkResult: True to throw an Exception if messaging result is negativ
+	// @params String emailBody: Email plain text body
+	//
+
 	E2A.sendE2AMessage(
+<<<<<<< HEAD
 		  String emailBody // Plain Text Body to set
 		, String className // Name of the Apex class to execute
 		, Object paramsObj // Object holding parameters used by the executed class
 		, Boolean doSerialze // True serializes the paramsObj to JSON
 		, Boolean checkResult // True to throw an Exception if Email Service result is negativ
 		);
+=======
+		  String className // Name of the Apex class to execute
+		, Object paramsObj // Optional - Object holding parameters used by the executed class
+		, Boolean doSerialize // Optional - True serializes the paramsObj to JSON
+		, Boolean checkResult // True to throw an Exception if messaging result is negativ
+		, String emailBody // Email plain text body
+	);
+
+	// SAMPLE
+	// Execute a Database.Batchable class called 'IBaseImport_Batch'
+	E2A.sendE2Message('IBaseImport_Batch',false,'Completed IBaseImport_Setup, start IBaseImport_Batch');
+>>>>>>> updated README.md
 
 
 _E2A accepts class names contained in the Email Subject as well, just sent an email to the Email Inbound Service with the plain class name in the subject_

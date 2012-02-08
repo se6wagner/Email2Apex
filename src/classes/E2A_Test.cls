@@ -14,7 +14,7 @@ private class E2A_Test
 		{
 			// test E2A.getE2AConfig() exception before creating new default
 			try{
-				E2A.getE2AConfig();
+				delete E2A.getE2AConfig();
 			} catch(Exception ex)
 			{
 				system.debug(ex);
@@ -96,15 +96,27 @@ private class E2A_Test
 		startTest(true);
 		Object paramsObj = 'PARAMS BODY';
 		E2A.sendE2AMessage(
-			  'Message Body'
-			, TEST_IMPL_CLASS
+			  TEST_IMPL_CLASS
 			, paramsObj
 			, true
 			, true
+			, 'Message Body'			
 		);
 
 		Test.stopTest();
 		
+	}
+
+	private static testMethod void testSendMessage2()
+	{
+		startTest(true);
+		E2A.sendE2AMessage(
+			  TEST_IMPL_CLASS
+			, true
+			, 'Message Body'
+		);
+
+		Test.stopTest();
 	}
 
 
