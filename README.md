@@ -34,14 +34,12 @@ Toolkit for executing Apex Code from Apex Email Services.
 	//
 
 	E2A.sendE2AMessage(
-<<<<<<< HEAD
 		  String emailBody // Plain Text Body to set
 		, String className // Name of the Apex class to execute
 		, Object paramsObj // Object holding parameters used by the executed class
 		, Boolean doSerialze // True serializes the paramsObj to JSON
 		, Boolean checkResult // True to throw an Exception if Email Service result is negativ
 		);
-=======
 		  String className // Name of the Apex class to execute
 		, Object paramsObj // Optional - Object holding parameters used by the executed class
 		, Boolean doSerialize // Optional - True serializes the paramsObj to JSON
@@ -52,7 +50,6 @@ Toolkit for executing Apex Code from Apex Email Services.
 	// SAMPLE
 	// Execute a Database.Batchable class called 'IBaseImport_Batch'
 	E2A.sendE2Message('IBaseImport_Batch',false,'Completed IBaseImport_Setup, start IBaseImport_Batch');
->>>>>>> updated README.md
 
 
 _E2A accepts class names contained in the Email Subject as well, just sent an email to the Email Inbound Service with the plain class name in the subject_
