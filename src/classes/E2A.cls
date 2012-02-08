@@ -72,9 +72,11 @@ global class E2A
 		 		: below is an example to deserialze a JSON string into
 		          a custom data type. 
 		   CAREFUL
-		   		: Be careful using serializing a subclass from JSON causes 
-		   		'System.JSONException: Don't know the type of the Apex object
-		   		to deserialize' in production (Winter '12) 
+		   		: Be careful when using custom data types as parameter
+				  objects, deserializing classes using the code sample
+				  below causes an 'System.JSONException: Don't know
+				  the type of the Apex object to deserialize' error
+				 in production like EMEA (as of Winter '12) ###
 		 */
 
 		 /**

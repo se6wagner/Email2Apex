@@ -72,7 +72,7 @@ private class E2A_TestSamples
 		startTest(false);
 
 		// Init new ParamsObj
-		E2A_SampleBatch2.ParamsObj paramsObj = new E2A_SampleBatch2.ParamsObj();
+		E2A_SampleParamsObj paramsObj = new E2A_SampleParamsObj();
 		paramsObj.accountList = new List<Account>();
 		for(Integer i = 0;i<20;i++)
 		{

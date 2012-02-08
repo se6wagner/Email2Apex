@@ -16,7 +16,7 @@ Toolkit for executing Apex Code from Apex Email Services.
 
 ## USAGE ##
 
-### CAUTION:: Be careful when using custom data types as parameter objects, deserializing subclasses causes an 'System.JSONException: Don't know the type of the Apex object to deserialize'  error in production like EMEA (as of Winter '12) ###
+### CAUTION:: Be careful when using custom data types as parameter objects, deserializing classes using (DATA_TYPE)JSON.deserialize((String)paramsObj, DATA_TYPE.class); causes an 'System.JSONException: Don't know the type of the Apex object to deserialize' error in production like EMEA (as of Winter '12) ###
 
 	//
 	// Sends an E2A ready message with Attachments
