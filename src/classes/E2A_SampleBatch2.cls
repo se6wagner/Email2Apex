@@ -24,13 +24,19 @@ global class E2A_SampleBatch2 implements
 	//--------------------------------------------------------------
 	// E2A.Executebale Implementation
 	//--------------------------------------------------------------
-	global void e2a_execute()
+	global E2A.ExecutionResult e2a_execute()
 	{
 		E2A_SampleBatch2 sb = params == null
 							? new E2A_SampleBatch2()
 							: new E2A_SampleBatch2(params);
+
 		system.debug('e2a_execute : ' + sb);
-		Database.executeBatch(sb , 200);
+		Id jobId = Database.executeBatch(sb , 200);
+
+		return new E2A.ExecutionResult(
+					  true
+					, 'Queued new Batch Job with ID ' + jobID);
+
 	}
 
 	/**

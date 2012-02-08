@@ -53,7 +53,7 @@ global class E2A
 	 */
 	global virtual interface Executeable
 	{
-		void e2a_execute();
+		ExecutionResult e2a_execute();
 	}
 
 	/**
@@ -91,6 +91,50 @@ global class E2A
 
 	}
 
+	//--------------------------------------------------------------
+	// RESULT DATA TYPE
+	//--------------------------------------------------------------
+	/**
+	 * ExecutionResult
+	 *
+	 * Object returned by e2a_execute method to check result of the execution 
+	 */
+	global class ExecutionResult
+	{
+
+		Boolean isSuccess;
+		String message;
+
+		/**
+		 * Standard Constructor
+		 *
+		 * @params isSuccess
+	 	 *					: true if the execution was successful
+		 * @params message
+	 	 *					: message for more detailed information
+		 */
+		global ExecutionResult(
+			  Boolean isSuccess
+			, String message)
+		{
+			this.isSuccess = isSuccess;
+			this.message = message;
+		}
+
+
+		global Boolean isSuccess()
+		{
+			return this.isSuccess;
+		}
+
+		global String getMessage()
+		{
+			return this.message != null
+					? this.message
+					: '';
+		}
+
+	}
 
 	//--------------------------------------------------------------
 	// API METHODS
@@ -177,12 +221,22 @@ global class E2A
 			mail.setOrgWideEmailAddressId(config.ORG_WIDE_EMAIL_ADDRESS_ID__c);
 		}
 
-		// set file attachments
-		mail.setFileAttachments(new List<Messaging.EmailFileattachment>{
-			  E2A.getClassNameAttachmentFor(className)
-			, E2A.getParamsAttachmentFor(paramsObj,doSerialze)
-		});
 
+		List<Messaging.EmailFileattachment> files =
+			new List<Messaging.EmailFileattachment>();
+
+		// add class name file
+		files.add(E2A.getClassNameAttachmentFor(className));
+
+		// if params defined attach it
+		if (paramsObj != null)
+		{
+			files.add(E2A.getParamsAttachmentFor(paramsObj,doSerialze));
+		}
+
+		// set file attachments
+		mail.setFileAttachments(files);
+	
 		return mail;
 	}
 
@@ -197,8 +251,9 @@ global class E2A
 	 *					: Name of the Apex class to execute
 	 * @params paramsObj
 	 *					: Object holding parameters used by the executed class
+	 * @returns E2A.ExecutionResult
 	 */
-	global static void execute(String className, Object paramsObj)
+	global static E2A.ExecutionResult execute(String className, Object paramsObj)
 	{
 
 
@@ -219,7 +274,7 @@ global class E2A
 		{
 			((E2A.ExecuteableWithParams)toExecute).e2a_setParams(paramsObj);
 		}
-		toExecute.e2a_execute();
+		return toExecute.e2a_execute();
 	}
 
 	/**

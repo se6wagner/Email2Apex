@@ -11,9 +11,10 @@ global class E2A_TestExecutableImpl implements E2A.ExecuteableWithParams
 		system.debug('##E2A_TestExecutableImpl params set: ' + obj);
 	}
 
-	global void e2a_execute()
+	global E2A.ExecutionResult e2a_execute()
 	{
 		system.debug('##E2A_TestExecutableImpl executing');
+		return new E2A.ExecutionResult(true,'E2A_TestExecutableImpl executing');
 	}
 
 }

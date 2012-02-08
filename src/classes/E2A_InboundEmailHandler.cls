@@ -68,16 +68,21 @@ global class E2A_InboundEmailHandler implements Messaging.InboundEmailHandler
 
 		try
 		{
-			E2A.execute(className, paramsObj);
-			result.success = true;
-			result.message = 'E2A:: Queued class ' + className + ' successfully'; 
+			// execute class and process result 
+			E2A.ExecutionResult res = E2A.execute(className, paramsObj);
+			result.success = res.isSuccess();
+			result.message = res.getMessage(); 
 		}
+		// catch Exception and set result to failed
 		catch(Exception ex)
 		{
+			system.debug('##E2A execution failed ' + ex);
 			result.success = false;
 			result.message = ex.getMessage();
 		}
-
+		
+		system.debug('##E2A result successful: ' + result + ' ( '+ result.message +')');
+		
 		return result;
 
 	}
