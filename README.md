@@ -5,7 +5,7 @@ Toolkit for executing Apex Code from Apex Email Services.
 ## FEATURES ##
 * batch job chaining / async execution
 * support for parameters incl. complex data types through JSON serialization
-* trigger Apex Code from any application with no need for Webservice Integration
+* trigger Apex Code from any application with no need for Webservice Integration by just sending an email to SFDC
 * simple API (check usage)
 
 ## SETUP ##
@@ -28,7 +28,7 @@ Toolkit for executing Apex Code from Apex Email Services.
 		, String className // Name of the Apex class to execute
 		, Object paramsObj // Object holding parameters used by the executed class
 		, Boolean doSerialze // True serializes the paramsObj to JSON
-		, Boolean checkResult // True to throw an Exception if result is negativ
+		, Boolean checkResult // True to throw an Exception if Email Service result is negativ
 		);
 
 
